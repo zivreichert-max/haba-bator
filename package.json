@@ -1,0 +1,17 @@
+{
+  "name": "haba-bator",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "update-polls": "node scripts/update-polls.mjs",
+    "fetch-photos": "node scripts/fetch-photos.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "serve": "npx --yes serve@14 -l 3000 ."
+  },
+  "devDependencies": {
+    "sharp": "^0.34.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

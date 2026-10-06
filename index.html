@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>הבא בתור</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <div>
+      <h1>הבא בתור<span class="plus" aria-hidden="true" dir="ltr">+1</span></h1>
+      <p class="lede">מי נכנס לכנסת אם המפלגה שלך מקבלת <mark>עוד מנדט אחד</mark>?</p>
+    </div>
+    <p class="eday" id="eday" hidden><b id="days"></b><span><strong id="days-t"></strong>27.10.2026</span></p>
+  </header>
+
+  <nav class="pick" aria-label="בחירת סקר">
+    <div class="tabs" id="tabs" role="tablist" aria-label="איזה סקר להציג"></div>
+  </nav>
+
+  <main class="stage">
+    <section class="board" aria-labelledby="board-h">
+      <div class="board-head">
+        <h2 class="label" id="board-h">בחרו מפלגה</h2>
+        <p class="label legend" aria-hidden="true"><i></i>מנדט בסקר<i class="nx"></i>המנדט הבא</p>
+      </div>
+      <ol class="rows" id="rows"></ol>
+    </section>
+    <aside id="dock" aria-label="המועמד שנבחר"><div id="spot" aria-live="polite"></div></aside>
+  </main>
+
+  <noscript><p>כדי לראות את הנתונים צריך להפעיל JavaScript בדפדפן.</p></noscript>
+
+  <footer class="foot">
+    <p><strong>הסקרים:</strong> הסקר האחרון שפרסם כל גוף, לפי
+      <a href="https://cz.ynet.co.il/Elections26/Polls/" target="_blank" rel="noopener">ynet</a> ו<a href="https://themadad.com/polls26/" target="_blank" rel="noopener">המדד</a>.
+      מוצגות רשימות שעוברות את אחוז החסימה (4 מנדטים) לפחות באחד משלושת הסקרים.</p>
+    <p><strong>הרשימות:</strong> סדר המועמדים כפי שהוגש לוועדת הבחירות המרכזית
+      (<a href="https://www.kan.org.il/content/kan-news/politic/1097401/" target="_blank" rel="noopener">כאן חדשות</a>,
+      <a href="https://www.idi.org.il/media/32320/הרשימה-המשותפת.pdf" target="_blank" rel="noopener">המכון הישראלי לדמוקרטיה</a>).
+      הפרטים האישיים והתמונות: <a href="https://votesmart.co.il/lists" target="_blank" rel="noopener">בוחרים חכם</a>.</p>
+    <p id="status">הסקרים מתעדכנים אוטומטית. עדכון אחרון: <span id="upd"></span>. הפרטים האישיים טרם אומתו מול המועמדים.</p>
+  </footer>
+</div>
+
+<script src="data/candidates.js"></script>
+<script src="data/polls.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

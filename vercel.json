@@ -1,0 +1,12 @@
+{
+  "framework": null,
+  "installCommand": "echo static site, no install",
+  "buildCommand": "echo static site, no build",
+  "outputDirectory": ".",
+  "headers": [
+    {
+      "source": "/data/polls.js",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    }
+  ]
+}

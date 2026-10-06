@@ -1,0 +1,72 @@
+name: update-polls
+
+# Every 3 hours until election day (27.10.2026, Israel time). Commits only when data/polls.js changed.
+# A failed run (validation error, both sources down, candidate gap) turns red and GitHub emails the repo owner.
+on:
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+    inputs:
+      check_only:
+        description: "Only test whether both sources are reachable from GitHub"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-polls
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Stop after election day
+        id: gate
+        run: |
+          today=$(TZ=Asia/Jerusalem date +%F)
+          if [[ "$today" > "2026-10-27" ]]; then
+            echo "Election day has passed ($today) — nothing to do."
+            echo "done=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.done != 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.gate.outputs.done != 'true'
+        with:
+          node-version: 22
+
+      - name: Source reachability
+        if: steps.gate.outputs.done != 'true' && inputs.check_only
+        run: node scripts/update-polls.mjs --check
+
+      - name: Tests
+        if: steps.gate.outputs.done != 'true' && !inputs.check_only
+        run: node --test tests/*.test.mjs
+
+      - name: Update polls
+        id: update
+        if: steps.gate.outputs.done != 'true' && !inputs.check_only
+        continue-on-error: true
+        run: node scripts/update-polls.mjs
+
+      - name: Commit if changed
+        if: steps.gate.outputs.done != 'true' && !inputs.check_only
+        run: |
+          git add data/polls.js
+          if git diff --cached --quiet; then echo "No change."; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "סקרים: עדכון אוטומטי $(TZ=Asia/Jerusalem date '+%-d.%-m.%Y %H:%M')"
+          git push
+
+      - name: Fail the run if the update reported errors
+        if: steps.update.outcome == 'failure'
+        run: |
+          echo "update-polls.mjs reported errors — see the annotations above."
+          exit 1
